@@ -1,0 +1,305 @@
+---
+import Icon from '../components/Icon.astro';
+import PageHeader from '../components/PageHeader.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import Base from '../layouts/Base.astro';
+import { contact, services } from '../data/site';
+
+const faqs = [
+  {
+    question: 'How long does a quote take?',
+    answer: 'You receive a detailed quote within ten working days after the site visit.',
+  },
+  {
+    question: 'Do you work on small renovation jobs?',
+    answer: 'Yes. Kitchens, bathrooms and facades are part of our daily work, not only large buildings.',
+  },
+  {
+    question: 'Who is my contact during the works?',
+    answer: 'One site manager follows your project from the first day to the handover, and sends a weekly report.',
+  },
+];
+---
+
+<Base
+  title="Contact | Bamboo Construction Co."
+  description="Ask for a quote or a site visit: address, phone, email and contact form."
+  current="contact/"
+>
+  <PageHeader
+    eyebrow="Contact"
+    title="Let's talk about your next project."
+    text="Tell us what you want to build. We answer every request within two working days."
+  />
+
+  <section class="container contact-grid" aria-label="Contact details and form">
+    <div class="contact-info" id="location">
+      <h2 class="contact-heading">Our office</h2>
+      <ul class="contact-list">
+        <li><Icon name="pin" class="ci ci--pin" />{contact.address}</li>
+        <li><Icon name="phone" class="ci ci--phone" />{contact.phone}</li>
+        <li><Icon name="mail" class="ci ci--mail" /><a href={`mailto:${contact.email}`}>{contact.email}</a></li>
+      </ul>
+      <h2 class="contact-heading" id="help">Help center</h2>
+      <p class="lead">Call or write to us Monday to Friday, 8 am to 6 pm.<br />Site visits on appointment.</p>
+    </div>
+
+    <form class="contact-form" novalidate data-form>
+      <div class="field">
+        <label for="name">Full name</label>
+        <input id="name" name="name" type="text" autocomplete="name" required aria-describedby="name-error" />
+        <p class="error" id="name-error" hidden>Please enter your name.</p>
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required aria-describedby="email-error" />
+        <p class="error" id="email-error" hidden>Please enter a valid email address.</p>
+      </div>
+      <div class="field">
+        <label for="phone">Phone <span class="optional">(optional)</span></label>
+        <input id="phone" name="phone" type="tel" autocomplete="tel" />
+      </div>
+      <div class="field">
+        <label for="service">Service</label>
+        <select id="service" name="service">
+          {services.map((service) => <option>{service.title}</option>)}
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field field--full">
+        <label for="message">Your project</label>
+        <textarea id="message" name="message" rows="6" required aria-describedby="message-error"></textarea>
+        <p class="error" id="message-error" hidden>Please describe your project in a few words.</p>
+      </div>
+      <div class="field--full">
+        <button class="button" type="submit">Send message<Icon name="arrow" /></button>
+        <p class="form-status" role="status" data-status></p>
+      </div>
+    </form>
+  </section>
+
+  <section class="section container" aria-labelledby="faq-title" id="faq">
+    <SectionTitle eyebrow="FAQs" title="Questions we often hear" id="faq-title" />
+    <div class="faq-list">
+      {
+        faqs.map((faq) => (
+          <details class="faq">
+            <summary>{faq.question}</summary>
+            <p>{faq.answer}</p>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+</Base>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-form]');
+  const status = document.querySelector<HTMLElement>('[data-status]');
+
+  if (form && status) {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      let firstInvalid: HTMLElement | null = null;
+
+      form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required]').forEach((field) => {
+        const error = document.getElementById(`${field.id}-error`);
+        const valid = field.checkValidity() && field.value.trim() !== '';
+        field.setAttribute('aria-invalid', String(!valid));
+        if (error) error.hidden = valid;
+        if (!valid && !firstInvalid) firstInvalid = field;
+      });
+
+      if (firstInvalid) {
+        (firstInvalid as HTMLElement).focus();
+        status.textContent = '';
+        return;
+      }
+
+      form.reset();
+      status.textContent = 'Thank you! This is a demo website, so your message was not sent anywhere.';
+    });
+  }
+</script>
+
+<style>
+  .contact-grid {
+    display: grid;
+    gap: 56px;
+    margin-top: 72px;
+  }
+
+  .contact-heading {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.5;
+  }
+
+  .contact-heading + * {
+    margin-top: 16px;
+  }
+
+  .contact-list + .contact-heading {
+    margin-top: 48px;
+  }
+
+  .contact-list {
+    font-weight: 600;
+    line-height: 1.8;
+  }
+
+  .contact-list li {
+    display: grid;
+    grid-template-columns: 23px 1fr;
+    align-items: center;
+  }
+
+  .contact-list a {
+    overflow-wrap: anywhere;
+  }
+
+  .contact-list a:hover {
+    color: var(--accent-text);
+  }
+
+  .contact-list :global(.ci) {
+    color: var(--accent);
+  }
+
+  .contact-list :global(.ci--pin) {
+    width: 10px;
+    margin-left: 3px;
+  }
+
+  .contact-list :global(.ci--phone) {
+    width: 15px;
+    margin-left: 1px;
+  }
+
+  .contact-list :global(.ci--mail) {
+    width: 16px;
+  }
+
+  .contact-form {
+    display: grid;
+    gap: 24px 20px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  label {
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .optional {
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1px solid #c9c9c9;
+    border-radius: 10px;
+    background: #fff;
+    font: inherit;
+    letter-spacing: inherit;
+    color: var(--ink);
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    border-color: var(--ink);
+    outline: 3px solid var(--accent);
+    outline-offset: 1px;
+  }
+
+  [aria-invalid='true'] {
+    border-color: #b42318;
+  }
+
+  .error {
+    font-size: 16px;
+    line-height: 1.4;
+    color: #b42318;
+  }
+
+  .form-status {
+    margin-top: 16px;
+    font-weight: 600;
+  }
+
+
+  .faq-list {
+    margin-top: 48px;
+    border-top: 1px solid var(--line);
+  }
+
+  .faq {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .faq summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    padding-block: 24px;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 1.5;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .faq summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq summary::after {
+    content: '+';
+    font-weight: 400;
+    color: var(--accent-text);
+  }
+
+  .faq[open] summary::after {
+    content: '\2212';
+  }
+
+  .faq p {
+    max-width: 760px;
+    padding-bottom: 24px;
+    color: var(--text);
+  }
+
+  @media (min-width: 768px) {
+    .contact-form {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .field--full {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .contact-grid {
+      grid-template-columns: minmax(0, 420fr) minmax(0, 860fr);
+      gap: 20px;
+      align-items: start;
+    }
+  }
+</style>

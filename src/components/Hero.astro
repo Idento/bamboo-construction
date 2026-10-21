@@ -1,0 +1,130 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import heroMain from '../assets/images/hero-main.jpg';
+import heroSide from '../assets/images/hero-side.jpg';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<section class="hero container" aria-labelledby="hero-title">
+  <div class="hero-text">
+    <h1 class="display-1" id="hero-title">Best construction company around the world.</h1>
+    <p class="lead">Vehicula at eget a arcu neque, ultricies. Aliquet tempus vel amet eget egestas musus leo non.</p>
+    <a class="button" href={`${base}/projects/`}>View our projects<Icon name="arrow" /></a>
+  </div>
+  <div class="hero-media">
+    <Image
+      class="hero-main"
+      src={heroMain}
+      alt="Two construction workers in yellow helmets driving a steel beam with a sledgehammer"
+      widths={[260, 401, 560, 802]}
+      sizes="(min-width: 1280px) 401px, (min-width: 1100px) 31vw, 62vw"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <Image
+      class="hero-side"
+      src={heroSide}
+      alt=""
+      widths={[150, 226, 320, 452]}
+      sizes="(min-width: 1280px) 226px, (min-width: 1100px) 18vw, 35vw"
+      loading="eager"
+    />
+    <span class="hero-square hero-square--accent"></span>
+    <span class="hero-square hero-square--slate"></span>
+  </div>
+</section>
+
+<style>
+  .hero {
+    display: grid;
+    gap: 56px;
+    padding-top: 56px;
+  }
+
+  .hero-text .lead {
+    max-width: 482px;
+    margin-top: 17px;
+  }
+
+  .hero-text .button {
+    margin-top: 47px;
+  }
+
+  .hero-media {
+    position: relative;
+    aspect-ratio: 640 / 644;
+  }
+
+  .hero-media :global(img),
+  .hero-square {
+    position: absolute;
+  }
+
+  .hero-media :global(img) {
+    object-fit: cover;
+    border-radius: var(--radius-card);
+  }
+
+  .hero-media :global(.hero-main) {
+    left: 0;
+    top: 0;
+    width: 62.66%;
+    height: 98.29%;
+  }
+
+  .hero-media :global(.hero-side) {
+    left: 64.69%;
+    top: 0;
+    width: 35.31%;
+    height: 79.66%;
+  }
+
+  .hero-square {
+    border-radius: 8px;
+  }
+
+  .hero-square--accent {
+    left: 64.69%;
+    top: 81.68%;
+    width: 17.66%;
+    height: 16.61%;
+    background: var(--accent);
+  }
+
+  .hero-square--slate {
+    left: 76.25%;
+    top: 88.2%;
+    width: 12.19%;
+    height: 11.8%;
+    background: var(--slate-dark);
+  }
+
+  @media (min-width: 1100px) {
+    .hero {
+      grid-template-columns: minmax(0, 660fr) minmax(0, 640fr);
+      gap: 0;
+      align-items: start;
+    }
+
+    .hero-text {
+      padding-top: 108px;
+      padding-right: 40px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .hero {
+      padding-top: 145px;
+    }
+
+    .hero-text {
+      padding-right: 0;
+    }
+
+    .hero-text h1 {
+      max-width: 602px;
+    }
+  }
+</style>

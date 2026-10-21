@@ -1,0 +1,58 @@
+---
+import { Image } from 'astro:assets';
+import { articles } from '../data/site';
+
+interface Props {
+  count?: number;
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { count = 3, headingLevel: Heading = 'h3' } = Astro.props;
+---
+
+<ul class="card-grid news-grid">
+  {
+    articles.slice(0, count).map((article) => (
+      <li class="card">
+        <article>
+          <div class="card-media news-media">
+            <Image
+              src={article.image}
+              alt={article.alt}
+              widths={[320, 420, 560, 840]}
+              sizes="(min-width: 1280px) 420px, (min-width: 1024px) 32vw, (min-width: 640px) 48vw, 100vw"
+            />
+          </div>
+          <p class="news-meta">
+            <time datetime={article.isoDate}>{article.date}</time>
+            <span aria-hidden="true">/</span>
+            {article.category}
+          </p>
+          <Heading class="card-title news-title">{article.title}</Heading>
+        </article>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .news-media {
+    aspect-ratio: 420 / 277;
+  }
+
+  .news-meta {
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;
+    padding-left: 10px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--soft);
+  }
+
+  .news-title {
+    margin-top: 8px;
+    padding-left: 10px;
+    max-width: 420px;
+  }
+</style>

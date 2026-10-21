@@ -1,0 +1,98 @@
+---
+import About from '../components/About.astro';
+import CallToAction from '../components/CallToAction.astro';
+import Hero from '../components/Hero.astro';
+import Icon from '../components/Icon.astro';
+import News from '../components/News.astro';
+import Projects from '../components/Projects.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import Services from '../components/Services.astro';
+import Stats from '../components/Stats.astro';
+import Testimonials from '../components/Testimonials.astro';
+import Base from '../layouts/Base.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<Base
+  title="Bamboo Construction Co. | Building, design and road works"
+  description="Bamboo Construction Co. builds new homes, designs spaces and maintains roads."
+  current=""
+>
+  <Hero />
+
+  <section class="container home-services" aria-label="Our services">
+    <Services headingLevel="h2" />
+  </section>
+
+  <About />
+
+  <section class="section" aria-labelledby="projects-title">
+    <div class="container">
+      <SectionTitle eyebrow="Latest projects" title="Explore our works" id="projects-title" class="projects-title" />
+      <Projects layout="carousel" />
+    </div>
+  </section>
+
+  <Testimonials />
+
+  <section class="section home-news" aria-labelledby="news-title">
+    <svg class="pattern pattern-news" viewBox="0 0 376.1 1038.4" aria-hidden="true">
+      <polygon points="0,353.8 440.4,0 440.3,1038.4"></polygon>
+    </svg>
+    <div class="container">
+      <SectionTitle eyebrow="News articles" title="Read some latest news articles" id="news-title" />
+      <div class="home-news-list">
+        <News />
+      </div>
+      <div class="home-news-more">
+        <a class="button" href={`${base}/news/`}>All articles<Icon name="arrow" /></a>
+      </div>
+    </div>
+  </section>
+
+  <Stats />
+  <CallToAction />
+</Base>
+
+<style>
+  .home-services {
+    margin-top: 120px;
+  }
+
+  .projects-title :global(.display-2) {
+    max-width: none;
+  }
+
+  .pattern-news {
+    display: none;
+    right: 0;
+    top: -493px;
+    width: 376.1px;
+    height: 1038.4px;
+  }
+
+  .home-news-list {
+    margin-top: 48px;
+  }
+
+  .home-news-more {
+    display: flex;
+    justify-content: center;
+    margin-top: 56px;
+  }
+
+  @media (min-width: 1280px) {
+    .home-services {
+      margin-top: 209px;
+    }
+
+    .home-news-list {
+      margin-top: 55px;
+    }
+
+    .pattern-news {
+      display: block;
+    }
+  }
+</style>

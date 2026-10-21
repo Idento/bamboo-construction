@@ -1,0 +1,76 @@
+---
+import { stats } from '../data/site';
+---
+
+<section class="section stats" aria-label="Company in numbers">
+  <svg class="pattern pattern-stats" viewBox="0 0 318 550" aria-hidden="true">
+    <polygon points="-83.8,33.9 317.9,431.2 -713.8,549.2"></polygon>
+  </svg>
+  <dl class="container stats-grid">
+    {
+      stats.map((stat) => (
+        <div class="stat">
+          <dt>{stat.label}</dt>
+          <dd>{stat.value}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</section>
+
+<style>
+  .pattern-stats {
+    display: none;
+    left: 0;
+    top: 0;
+    width: 318px;
+    height: 550px;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 48px 20px;
+    margin-block: 0;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+  }
+
+  dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(3rem, 2rem + 2.5vw, 4.6875rem);
+    line-height: 1.19;
+  }
+
+  dt {
+    margin-top: 6px;
+    font-family: var(--font-display);
+    line-height: 1.2;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--eyebrow);
+  }
+
+  @media (min-width: 1024px) {
+    .stats-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .stats-grid {
+      grid-template-columns: repeat(3, 330px) 1fr;
+      gap: 0;
+    }
+
+    .pattern-stats {
+      display: block;
+    }
+  }
+</style>

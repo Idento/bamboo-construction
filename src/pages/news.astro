@@ -1,0 +1,28 @@
+---
+import CallToAction from '../components/CallToAction.astro';
+import News from '../components/News.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="News | Bamboo Construction Co."
+  description="Articles about architecture, building sites, safety and the construction industry."
+  current="news/"
+>
+  <PageHeader
+    eyebrow="News"
+    title="Read some latest news articles."
+    text="Stories from our sites, our teams and the buildings that inspire us."
+  />
+  <section class="container news-page" aria-label="All articles">
+    <News count={6} headingLevel="h2" />
+  </section>
+  <CallToAction />
+</Base>
+
+<style>
+  .news-page {
+    margin-top: 72px;
+  }
+</style>

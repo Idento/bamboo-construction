@@ -1,0 +1,125 @@
+---
+import { Image } from 'astro:assets';
+import About from '../components/About.astro';
+import CallToAction from '../components/CallToAction.astro';
+import PageHeader from '../components/PageHeader.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import Stats from '../components/Stats.astro';
+import Testimonials from '../components/Testimonials.astro';
+import Base from '../layouts/Base.astro';
+import banner from '../assets/images/page-about.jpg';
+
+const values = [
+  {
+    number: '01',
+    title: 'Safety first',
+    text: 'Every crew follows the same written safety plan, checked on site each morning before work starts.',
+  },
+  {
+    number: '02',
+    title: 'One team, start to finish',
+    text: 'The people who draw your project are the people who build it and hand you the keys.',
+  },
+  {
+    number: '03',
+    title: 'Honest schedules',
+    text: 'We give you a realistic date, a weekly progress report and a clear answer when something changes.',
+  },
+];
+---
+
+<Base
+  title="About us | Bamboo Construction Co."
+  description="Who we are: a construction company that designs, builds and maintains, with one team from start to finish."
+  current="about/"
+>
+  <PageHeader
+    eyebrow="About"
+    title="We build what cities need to grow."
+    text="Vehicula at eget a arcu neque, ultricies. Aliquet tempus vel amet eget egestas musus leo non."
+  />
+
+  <div class="container page-banner">
+    <Image
+      src={banner}
+      alt="Tower cranes above a large building site"
+      widths={[650, 1300]}
+      sizes="(min-width: 1380px) 1300px, calc(100vw - 80px)"
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
+
+  <About withLink={false} />
+
+  <section class="section container" aria-labelledby="values-title">
+    <SectionTitle eyebrow="Our values" title="What guides every project" id="values-title" />
+    <ol class="values">
+      {
+        values.map((value) => (
+          <li class="value">
+            <span class="value-number" aria-hidden="true">
+              {value.number}
+            </span>
+            <h3>{value.title}</h3>
+            <p class="lead">{value.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <Stats />
+  <Testimonials />
+  <CallToAction />
+</Base>
+
+<style>
+  .page-banner {
+    margin-top: 64px;
+  }
+
+  .page-banner :global(img) {
+    width: 100%;
+    aspect-ratio: 1300 / 560;
+    object-fit: cover;
+    border-radius: var(--radius-card);
+  }
+
+  .values {
+    display: grid;
+    gap: 48px 20px;
+    margin-top: 56px;
+  }
+
+  .value {
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+
+  .value-number {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.15em;
+    color: var(--accent-text);
+  }
+
+  .value h3 {
+    margin-top: 12px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.5;
+  }
+
+  .value .lead {
+    margin-top: 10px;
+  }
+
+  @media (min-width: 900px) {
+    .values {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

@@ -1,0 +1,28 @@
+---
+import CallToAction from '../components/CallToAction.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Projects from '../components/Projects.astro';
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Projects | Bamboo Construction Co."
+  description="Industrial buildings, offices, houses and roads built or renovated by Bamboo Construction Co."
+  current="projects/"
+>
+  <PageHeader
+    eyebrow="Projects"
+    title="Explore our works."
+    text="Gravida feugiat viverra porttitor semper in faucibus ut. Ipsum, vel aliquet purus urna placerat convallis felis."
+  />
+  <section class="container projects-page" aria-label="All projects">
+    <Projects layout="grid" headingLevel="h2" />
+  </section>
+  <CallToAction />
+</Base>
+
+<style>
+  .projects-page {
+    margin-top: 40px;
+  }
+</style>

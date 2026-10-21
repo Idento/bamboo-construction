@@ -1,0 +1,65 @@
+---
+import Icon from './Icon.astro';
+import { socials } from '../data/site';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<ul class:list={['socials', className]}>
+  {
+    socials.map((social) => (
+      <li>
+        <a href={social.href} rel="noopener">
+          <Icon name={social.icon} class={`social-icon social-icon--${social.icon}`} />
+          <span class="visually-hidden">{social.label}</span>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .socials {
+    display: flex;
+    align-items: center;
+    gap: var(--socials-gap, 28px);
+  }
+
+  .socials a {
+    position: relative;
+    display: block;
+    transition: color 0.2s ease;
+  }
+
+  /* Keeps the design spacing while giving each icon a 24px+ touch target. */
+  .socials a::before {
+    content: '';
+    position: absolute;
+    inset: -8px -10px;
+  }
+
+  .socials a:hover {
+    color: var(--accent-text);
+  }
+
+  .socials :global(.social-icon) {
+    height: 12px;
+    width: auto;
+  }
+
+  .socials :global(.social-icon--facebook) {
+    height: 15px;
+  }
+
+  .socials :global(.social-icon--twitter) {
+    height: 11px;
+  }
+
+  .socials :global(.social-icon--blogger) {
+    height: 10px;
+  }
+</style>

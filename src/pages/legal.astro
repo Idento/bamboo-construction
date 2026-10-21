@@ -1,0 +1,75 @@
+---
+import PageHeader from '../components/PageHeader.astro';
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Terms and privacy | Bamboo Construction Co."
+  description="Terms of use and privacy policy of this demo website."
+  current="legal/"
+>
+  <PageHeader
+    eyebrow="Legal"
+    title="Terms of use and privacy."
+    text="Bamboo Construction Co. is a fictional company. This website is a demonstration."
+  />
+
+  <div class="container legal">
+    <section aria-labelledby="terms" class="legal-block">
+      <h2 id="terms">Terms of use</h2>
+      <p>
+        This website shows how a Figma design can be turned into a fast and accessible website. The company, the
+        projects, the articles and the testimonials are fictional. Nothing on this website is an offer or a contract.
+      </p>
+      <p>
+        The design is <a
+          href="https://www.figma.com/community/file/1513494000812520595/bamboo-construction-company-free-website-design-template"
+          >Bamboo by TemplatesJungle</a
+        >, used under the <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license. The extra pages were
+        designed in the same style.
+      </p>
+    </section>
+    <section aria-labelledby="privacy" class="legal-block">
+      <h2 id="privacy">Privacy policy</h2>
+      <p>
+        This website uses no cookies, no analytics and no tracking. The contact form does not send or store anything:
+        what you type stays in your browser.
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .legal {
+    max-width: 760px;
+    margin-top: 72px;
+    margin-left: max(var(--gutter), (100% - var(--container)) / 2);
+  }
+
+  .legal-block + .legal-block {
+    margin-top: 56px;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.5;
+    scroll-margin-top: 24px;
+  }
+
+  p {
+    margin-top: 16px;
+    color: var(--text);
+  }
+
+  a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  a:hover {
+    color: var(--accent-text);
+  }
+</style>

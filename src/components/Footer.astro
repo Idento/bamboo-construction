@@ -1,0 +1,203 @@
+---
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import Socials from './Socials.astro';
+import { contact } from '../data/site';
+
+interface Props {
+  current: string;
+}
+
+const { current } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+const columns = [
+  [
+    { label: 'Home', href: '' },
+    { label: 'Services', href: 'services/' },
+    { label: 'News', href: 'news/' },
+    { label: 'Terms of use', href: 'legal/#terms' },
+    { label: 'Privacy policy', href: 'legal/#privacy' },
+  ],
+  [
+    { label: 'Our location', href: 'contact/#location' },
+    { label: 'About', href: 'about/' },
+    { label: 'Contact', href: 'contact/' },
+    { label: 'Help center', href: 'contact/#help' },
+    { label: 'FAQs', href: 'contact/#faq' },
+  ],
+];
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <Logo />
+      <p>Vehicula at eget a arcu neque, ultricies liquet tempus.</p>
+    </div>
+    {
+      columns.map((links, index) => (
+        <nav aria-label={index === 0 ? 'Footer' : 'Help'}>
+          <ul class="footer-links">
+            {links.map((link) => (
+              <li>
+                <a href={`${base}/${link.href}`} aria-current={link.href === current ? 'page' : undefined}>
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ))
+    }
+    <address class="footer-contact">
+      <p><Icon name="pin" class="contact-icon contact-icon--pin" />{contact.address}</p>
+      <p><Icon name="phone" class="contact-icon contact-icon--phone" />{contact.phone}</p>
+      <p>
+        <Icon name="mail" class="contact-icon contact-icon--mail" />
+        <a href={`mailto:${contact.email}`}>{contact.email}</a>
+      </p>
+    </address>
+  </div>
+  <div class="footer-bottom">
+    <div class="container footer-bottom-inner">
+      <p>
+        © 2026 Bamboo Construction Co. <span aria-hidden="true">|</span> Design by{' '}
+        <a href="https://www.figma.com/community/file/1513494000812520595/bamboo-construction-company-free-website-design-template"
+          >TemplatesJungle</a
+        > (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>)
+      </p>
+      <Socials class="footer-socials" />
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: 160px;
+  }
+
+  .footer-grid {
+    display: grid;
+    gap: 40px 24px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+
+  .footer-brand p {
+    max-width: 286px;
+    margin-top: 17px;
+    color: var(--text);
+  }
+
+  .footer-links {
+    font-weight: 600;
+    line-height: 1.8;
+    text-transform: capitalize;
+  }
+
+  .footer-links a {
+    transition: color 0.2s ease;
+  }
+
+  .footer-links a:hover,
+  .footer-links a[aria-current='page'] {
+    color: var(--accent-text);
+  }
+
+  .footer-contact {
+    grid-column: 1 / -1;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 1.8;
+  }
+
+  .footer-contact p {
+    display: grid;
+    grid-template-columns: 23px 1fr;
+    align-items: center;
+  }
+
+  .footer-contact a {
+    overflow-wrap: anywhere;
+  }
+
+  .footer-contact a:hover {
+    color: var(--accent-text);
+  }
+
+  .footer-contact :global(.contact-icon) {
+    color: var(--accent);
+  }
+
+  .footer-contact :global(.contact-icon--pin) {
+    width: 10px;
+    margin-left: 3px;
+  }
+
+  .footer-contact :global(.contact-icon--phone) {
+    width: 15px;
+    margin-left: 1px;
+  }
+
+  .footer-contact :global(.contact-icon--mail) {
+    width: 16px;
+  }
+
+  .footer-bottom {
+    margin-top: 64px;
+    border-top: 1px solid var(--line-footer);
+  }
+
+  .footer-bottom-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px 40px;
+    padding-block: 31px 32px;
+    color: var(--text);
+  }
+
+  .footer-bottom-inner a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .footer-bottom-inner a:hover {
+    color: var(--ink);
+  }
+
+  .footer-bottom :global(.footer-socials) {
+    --socials-gap: 20px;
+    color: var(--ink);
+  }
+
+  @media (min-width: 768px) {
+    .footer-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.6fr);
+    }
+
+    .footer-contact {
+      grid-column: auto;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .footer-grid {
+      grid-template-columns: 440px 280px 270px 1fr;
+      column-gap: 0;
+    }
+
+    .footer-brand {
+      grid-column: auto;
+    }
+
+    .footer-bottom {
+      margin-top: 138px;
+    }
+  }
+</style>

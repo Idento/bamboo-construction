@@ -1,0 +1,134 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import SectionTitle from './SectionTitle.astro';
+import aboutTeam from '../assets/images/about-team.jpg';
+import aboutVideo from '../assets/images/about-video.jpg';
+
+interface Props {
+  withLink?: boolean;
+}
+
+const { withLink = true } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<section class="section about" aria-labelledby="about-title">
+  <svg class="pattern pattern-about" viewBox="0 0 414 1053" aria-hidden="true">
+    <polygon points="-60,0 414,526.5 -60,1053"></polygon>
+  </svg>
+  <div class="container">
+    <SectionTitle eyebrow="About us" title="Recognize more about our company" id="about-title" />
+    <div class="about-grid">
+      <Image
+        class="about-team"
+        src={aboutTeam}
+        alt="Four builders in white helmets raising a wooden wall frame"
+        widths={[360, 594, 800, 1188]}
+        sizes="(min-width: 1280px) 594px, (min-width: 900px) 46vw, 100vw"
+      />
+      <div class="about-content">
+        <figure class="about-video">
+          <Image
+            src={aboutVideo}
+            alt="Two welders at work on a steel bridge structure"
+            widths={[360, 640, 860, 1280]}
+            sizes="(min-width: 1280px) 640px, (min-width: 900px) 49vw, 100vw"
+          />
+          <span class="play" aria-hidden="true"><Icon name="play" /></span>
+        </figure>
+        <p class="about-intro">Enim leo leo non in viverra adipiscing nisi sed dictum nisi blandit.</p>
+        <p class="about-text">
+          Gravida feugiat viverra porttitor semper in faucibus ut. Ipsum, vel aliquet purus urna placerat convallis
+          felis. Pretium curabitur fames est.
+        </p>
+        {withLink && <a class="button" href={`${base}/about/`}>About us<Icon name="arrow" /></a>}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pattern-about {
+    display: none;
+    left: 0;
+    top: 253px;
+    width: 414px;
+    height: 1053px;
+  }
+
+  .about-grid {
+    display: grid;
+    gap: 40px;
+    margin-top: 48px;
+  }
+
+  .about-grid :global(img) {
+    width: 100%;
+    object-fit: cover;
+    border-radius: var(--radius-card);
+  }
+
+  .about-grid :global(.about-team) {
+    aspect-ratio: 594 / 728;
+    max-height: 728px;
+  }
+
+  .about-video {
+    position: relative;
+  }
+
+  .about-video :global(img) {
+    aspect-ratio: 640 / 408;
+  }
+
+  .play {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: grid;
+    place-items: center;
+    width: 71px;
+    height: 71px;
+    border-radius: 50%;
+    background: #fff;
+    transform: translate(-50%, -50%);
+  }
+
+  .play :global(svg) {
+    width: 15px;
+    height: 21px;
+    margin-left: 4px;
+  }
+
+  .about-intro {
+    margin-top: 38px;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 1.8;
+  }
+
+  .about-text {
+    margin-top: 8px;
+    line-height: 1.8;
+    color: var(--muted);
+  }
+
+  .about-content .button {
+    margin-top: 35px;
+  }
+
+  @media (min-width: 900px) {
+    .about-grid {
+      grid-template-columns: minmax(0, 594fr) minmax(0, 640fr);
+      column-gap: 66px;
+      margin-top: 76px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .pattern-about {
+      display: block;
+    }
+  }
+</style>

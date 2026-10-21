@@ -1,0 +1,51 @@
+---
+const base = import.meta.env.BASE_URL;
+---
+
+<a class="logo" href={`${base}/`}>
+  <svg class="logo-mark" viewBox="0 0 33 41" aria-hidden="true" focusable="false">
+    <path d="M26 0l7 7-7-1.75L19 7l7-7Z" fill="#334756"></path>
+    <rect x="19" y="10" width="14" height="31" rx="2" fill="#f0a500"></rect>
+    <rect x="0" y="18" width="14" height="23" rx="2" fill="#334756"></rect>
+  </svg>
+  <span class="logo-text">
+    <span class="logo-name">Bamboo</span>{' '}
+    <span class="logo-tagline">Construction Co.</span>
+  </span>
+</a>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .logo-mark {
+    width: 33px;
+    height: 41px;
+    margin-top: 1px;
+  }
+
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .logo-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 28px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .logo-tagline {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    letter-spacing: 0.08em;
+    color: var(--soft);
+  }
+</style>

@@ -1,0 +1,46 @@
+---
+import { filledIcons } from './icon-paths';
+
+// Line icons drawn for the pages added beyond the original design.
+const strokeIcons = {
+  menu: '<path d="M3 7h18M3 12h18M3 17h18"/>',
+  close: '<path d="M5 5l14 14M19 5L5 19"/>',
+  helmet:
+    '<path d="M6 40h52M10 40v-6a22 22 0 0 1 44 0v6M26 13v13M38 13v13M24 13h16M8 40l2 8h44l2-8"/>',
+  crane: '<path d="M18 58V8M12 58h12M18 8l34 6M18 20l34-6M18 8 8 14h10M44 14v18M40 32h8v8h-8zM18 20 8 14"/>',
+  roller: '<path d="M8 8h40v14H8zM48 15h6v16H30v8M26 39h8v19h-8z"/>',
+};
+
+export type IconName = keyof typeof filledIcons | keyof typeof strokeIcons;
+
+interface Props {
+  name: IconName;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+const filled = name in filledIcons ? filledIcons[name as keyof typeof filledIcons] : undefined;
+const stroke = name in strokeIcons ? strokeIcons[name as keyof typeof strokeIcons] : undefined;
+const strokeViewBox = name === 'menu' || name === 'close' ? '0 0 24 24' : '0 0 64 64';
+---
+
+{
+  filled ? (
+    <svg class={className} viewBox={filled.viewBox} fill="currentColor" aria-hidden="true" focusable="false">
+      <path d={filled.d} />
+    </svg>
+  ) : (
+    <svg
+      class={className}
+      viewBox={strokeViewBox}
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      focusable="false"
+      set:html={stroke}
+    />
+  )
+}

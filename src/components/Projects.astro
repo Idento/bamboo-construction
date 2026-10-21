@@ -1,0 +1,273 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { projectCategories, projects } from '../data/site';
+
+interface Props {
+  layout: 'carousel' | 'grid';
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { layout, headingLevel: Heading = 'h3' } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<div class:list={['projects', `projects--${layout}`]} data-projects>
+  <div class="projects-bar">
+    <div class="tabs" role="group" aria-label="Filter projects by category">
+      <button type="button" class="tab" aria-pressed="true" data-filter="all">All</button>
+      {
+        projectCategories.map((category) => (
+          <button type="button" class="tab" aria-pressed="false" data-filter={category}>
+            {category}
+          </button>
+        ))
+      }
+    </div>
+    {
+      layout === 'carousel' && (
+        <a class="text-link view-all" href={`${base}/projects/`}>
+          View all projects
+          <Icon name="arrow" />
+        </a>
+      )
+    }
+  </div>
+  <ul
+    class:list={['project-list', layout === 'grid' && 'card-grid']}
+    data-track
+    tabindex={layout === 'carousel' ? 0 : undefined}
+    aria-label={layout === 'carousel' ? 'Latest projects' : undefined}
+  >
+    {
+      projects.map((project) => (
+        <li class="card project" data-category={project.category}>
+          <div class="card-media project-media">
+            <Image
+              src={project.image}
+              alt={project.alt}
+              widths={[320, 420, 560, 840]}
+              sizes="(min-width: 1280px) 420px, (min-width: 1024px) 32vw, (min-width: 640px) 48vw, 85vw"
+            />
+          </div>
+          <Heading class="card-title project-title">{project.title}</Heading>
+          <p class="project-category">{project.category}</p>
+        </li>
+      ))
+    }
+  </ul>
+  <p class="projects-empty" hidden data-empty>No project in this category yet.</p>
+  {layout === 'carousel' && <div class="dots" data-dots />}
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-projects]').forEach((root) => {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('.tab')];
+    const track = root.querySelector<HTMLElement>('[data-track]');
+    const cards = [...root.querySelectorAll<HTMLElement>('.project')];
+    const empty = root.querySelector<HTMLElement>('[data-empty]');
+    const dotsBox = root.querySelector<HTMLElement>('[data-dots]');
+    if (!track) return;
+
+    const visibleCards = () => cards.filter((card) => !card.hidden);
+
+    // One dot per reachable scroll position: cards that can sit at the left edge, plus the end of the track.
+    let stops: number[] = [];
+
+    const renderDots = () => {
+      if (!dotsBox) return;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      stops = [];
+      if (maxScroll > 2) {
+        visibleCards().forEach((card) => {
+          const left = card.offsetLeft - track.offsetLeft;
+          if (left < maxScroll - 2) stops.push(left);
+        });
+        stops.push(maxScroll);
+      }
+      dotsBox.replaceChildren(
+        ...stops.map((left, index) => {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'dot';
+          dot.setAttribute('aria-label', `Show projects, position ${index + 1} of ${stops.length}`);
+          dot.addEventListener('click', () => track.scrollTo({ left, behavior: 'smooth' }));
+          return dot;
+        }),
+      );
+      updateActiveDot();
+    };
+
+    const updateActiveDot = () => {
+      if (!dotsBox || stops.length === 0) return;
+      const distances = stops.map((left) => Math.abs(left - track.scrollLeft));
+      const active = distances.indexOf(Math.min(...distances));
+      [...dotsBox.children].forEach((dot, index) => {
+        dot.setAttribute('aria-current', String(index === active));
+      });
+    };
+
+    new ResizeObserver(renderDots).observe(track);
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const filter = tab.dataset.filter;
+        tabs.forEach((other) => other.setAttribute('aria-pressed', String(other === tab)));
+        cards.forEach((card) => {
+          card.hidden = filter !== 'all' && card.dataset.category !== filter;
+        });
+        if (empty) empty.hidden = visibleCards().length > 0;
+        track.scrollLeft = 0;
+        renderDots();
+      });
+    });
+
+    track.addEventListener('scroll', updateActiveDot, { passive: true });
+    renderDots();
+  });
+</script>
+
+<style>
+  .projects-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px 40px;
+    margin-top: 40px;
+  }
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+  }
+
+  @media (min-width: 768px) {
+    .tabs {
+      column-gap: 45px;
+    }
+  }
+
+  .tab {
+    flex: none;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 1.2;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+
+  .tab:hover,
+  .tab[aria-pressed='true'] {
+    color: var(--ink);
+  }
+
+  .tab[aria-pressed='true'] {
+    font-weight: 600;
+  }
+
+  .project-list {
+    margin-top: 50px;
+  }
+
+  .projects--carousel .project-list {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 85%;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+
+  .projects--carousel .project-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .projects--carousel .project {
+    scroll-snap-align: start;
+  }
+
+  .project[hidden] {
+    display: none;
+  }
+
+  .project-media {
+    aspect-ratio: 420 / 353;
+  }
+
+  .project-title {
+    margin-top: 11px;
+    padding-left: 10px;
+  }
+
+  .project-category {
+    padding-left: 10px;
+    font-size: 16px;
+    color: var(--muted);
+  }
+
+  .projects--carousel .project-category {
+    display: none;
+  }
+
+  .projects-empty {
+    margin-top: 32px;
+    color: var(--muted);
+  }
+
+  .dots {
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+    margin-block: 67px -8px;
+  }
+
+  .dots :global(.dot) {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+
+  .dots :global(.dot)::before {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    margin: auto;
+    border-radius: 50%;
+    background: #ddd;
+    transition: background-color 0.2s ease;
+  }
+
+  .dots :global(.dot[aria-current='true'])::before {
+    background: var(--accent);
+  }
+
+  @media (min-width: 640px) {
+    .projects--carousel .project-list {
+      grid-auto-columns: calc((100% - 20px) / 2);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .projects--carousel .project-list {
+      grid-auto-columns: calc((100% - 40px) / 3);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .projects-bar {
+      margin-top: 54px;
+    }
+  }
+</style>
