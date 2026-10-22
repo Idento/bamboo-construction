@@ -33,9 +33,9 @@ export const socials = [
 ] as const;
 
 export const contact = {
-  address: '1630 Elm Drive, New York City',
-  phone: '+49 34 36573355',
-  email: 'contact@bamboo.example',
+  address: 'Construction and renovation',
+  phone: 'Open Monday to Friday',
+  email: 'Contact us',
 };
 
 export interface Service {

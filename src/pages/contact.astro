@@ -23,7 +23,7 @@ const faqs = [
 
 <Base
   title="Contact | Bamboo Construction Co."
-  description="Ask for a quote or a site visit: address, phone, email and contact form."
+  description="Ask for a quote or a site visit: opening hours and contact form."
   current="contact/"
 >
   <PageHeader
@@ -37,11 +37,11 @@ const faqs = [
       <h2 class="contact-heading">Our office</h2>
       <ul class="contact-list">
         <li><Icon name="pin" class="ci ci--pin" />{contact.address}</li>
-        <li><Icon name="phone" class="ci ci--phone" />{contact.phone}</li>
-        <li><Icon name="mail" class="ci ci--mail" /><a href={`mailto:${contact.email}`}>{contact.email}</a></li>
+        <li><Icon name="phone" class="ci ci--phone" />{contact.phone}, 8 am to 6 pm</li>
+        <li><Icon name="mail" class="ci ci--mail" />Use the form to write to us</li>
       </ul>
       <h2 class="contact-heading" id="help">Help center</h2>
-      <p class="lead">Call or write to us Monday to Friday, 8 am to 6 pm.<br />Site visits on appointment.</p>
+      <p class="lead">Open Monday to Friday, 8 am to 6 pm.<br />Site visits on appointment.</p>
     </div>
 
     <form class="contact-form" novalidate data-form>
